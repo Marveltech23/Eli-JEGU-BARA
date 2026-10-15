@@ -55,8 +55,8 @@ const IMAGES = {
   aboutPortrait: "/images/aboutpicture.jpeg",                 // ABOUT: biography portrait
   aboutBanner: "",                   // ABOUT: "No one left behind." banner (wide)
   manifestoHero: "",                 // MANIFESTO: header banner (wide)
-  pillars: ["", "", "", "", "", ""], // MANIFESTO: 6 cards, in order: Health, Security, Agriculture, Sports/Youth/Education, Infrastructure, Policy & Funding
-  contactPortrait: "",               // CONTACT: side portrait
+  pillars: ["/images/healthmanifest.jpg", "/images/security.jpeg", "images/foodsecuirty.jpg", "/images/sport.jpg", "/images/infrastructure.jpg", "/images/policymachnaism.jpeg"], // MANIFESTO: 6 cards, in order: Health, Security, Agriculture, Sports/Youth/Education, Infrastructure, Policy & Funding
+  contactPortrait: "/images/contact.jpeg",               // CONTACT: side portrait
 };
 
 function getImage(name, index) {
