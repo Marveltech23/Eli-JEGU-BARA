@@ -40,6 +40,49 @@ const Linkedin = (props) => (
 const CONTAINER = "w-full max-w-[1500px] mx-auto px-5 sm:px-8 lg:px-12 xl:px-20";
 const READ = "max-w-[62ch]";
 
+/* ---------------------------------------------------------------------
+   IMAGE PATHS — the ONLY place you need to edit.
+   Put your files in  public/images/  and write the path starting with "/images/..."
+   (do NOT write "public" in the path). Leave "" to keep the placeholder.
+------------------------------------------------------------------------*/
+const IMAGES = {
+  logo: "/images/logo.png",                          // Logo mark: nav, footer, contact header (square / round works best)
+  hero: "/images/govormor.jpeg",     // HOME: hero right panel (portrait)
+  featured: "",                      // HOME: Featured priority "Kiri Dam Irrigation" (landscape)
+  homeCards: ["/images/Health.jpeg", "/images/security.jpeg", "/images/agriculture.jpeg"],           // HOME: 3 manifesto cards, in order: Health, Security, Agriculture
+  focusTop: "",                      // HOME: card "Two decades in law, governance…"
+  focusBottom: "",                   // HOME: card "A manifesto built on health…"
+  aboutPortrait: "/images/aboutpicture.jpeg",                 // ABOUT: biography portrait
+  aboutBanner: "",                   // ABOUT: "No one left behind." banner (wide)
+  manifestoHero: "",                 // MANIFESTO: header banner (wide)
+  pillars: ["", "", "", "", "", ""], // MANIFESTO: 6 cards, in order: Health, Security, Agriculture, Sports/Youth/Education, Infrastructure, Policy & Funding
+  contactPortrait: "",               // CONTACT: side portrait
+};
+
+function getImage(name, index) {
+  const v = IMAGES[name];
+  return Array.isArray(v) ? v[index] : v;
+}
+
+/* Renders nothing while the path is empty, so placeholders stay visible */
+function Photo({ name, index, alt = "", fit = "cover", className = "" }) {
+  const src = getImage(name, index);
+  if (!src) return null;
+  return (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      className={`absolute inset-0 w-full h-full ${fit === "contain" ? "object-contain" : "object-cover"} ${className}`}
+    />
+  );
+}
+
+/* Dark overlay that only appears when the slot has a photo (keeps text readable) */
+function Shade({ name, index, className = "bg-black/40" }) {
+  return getImage(name, index) ? <div className={`absolute inset-0 ${className}`} /> : null;
+}
+
 const FONTS = `
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
 `;
@@ -150,7 +193,11 @@ function StatCounter({ target, suffix = "", label }) {
 function Logo({ light, compact }) {
   return (
     <div className="flex items-center gap-2.5 sm:gap-3">
-      <div className={`shrink-0 ${compact ? "w-9 h-9" : "w-9 h-9 sm:w-11 sm:h-11"}`}><Seal className="w-full h-full" /></div>
+      {/* IMAGE: logo */}
+      <div className={`relative shrink-0 ${compact ? "w-9 h-9" : "w-9 h-9 sm:w-11 sm:h-11"}`}>
+        {!IMAGES.logo && <Seal className="w-full h-full" />}
+        <Photo name="logo" alt="Campaign logo" fit="contain" />
+      </div>
       <div className="leading-tight">
         <div
           className={`font-semibold text-[13px] sm:text-[15px] tracking-tight ${light ? "text-white" : "text-[#15171A]"}`}
@@ -342,7 +389,11 @@ function Footer({ go }) {
       <div className={`${CONTAINER} pt-16 sm:pt-20 lg:pt-24 pb-8`}>
         <div className="grid lg:grid-cols-[1.3fr_1fr_1fr_1fr] gap-10 lg:gap-8 pb-14 sm:pb-16 border-b border-white/10">
           <div>
-            <div className="w-12 h-12 mb-5"><Seal className="w-full h-full" /></div>
+            {/* IMAGE: logo (footer) */}
+            <div className="relative w-12 h-12 mb-5">
+              {!IMAGES.logo && <Seal className="w-full h-full" />}
+              <Photo name="logo" alt="Campaign logo" fit="contain" />
+            </div>
             <p className="text-white/50 text-[13.5px] leading-relaxed max-w-xs mb-6">
               The campaign of Chief Eli Jegu&#8209;Bara Gamaliel (ICMC, CMC, JP) for the Federal House of Representatives, representing Guyuk/Shelleng Federal Constituency, Adamawa State.
             </p>
@@ -422,11 +473,19 @@ function Home({ go }) {
             <Reveal>
               <p className="text-white/55 text-[11px] tracking-[0.25em] mb-5">GUYUK/SHELLENG FEDERAL CONSTITUENCY &middot; ADAMAWA STATE</p>
             </Reveal>
-            <Reveal delay={80}>
-              <h1 className="text-white text-[clamp(2.4rem,5.6vw,4.6rem)] leading-[1.02] tracking-[-0.03em]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                A voice for<br />Guyuk/Shelleng.
-              </h1>
-            </Reveal>
+            
+<Reveal delay={80}>
+  <h1
+    className="text-[length:clamp(2.4rem,5.6vw,4.6rem)] leading-[1.02] tracking-[-0.03em]"
+    style={{
+      fontFamily: "'Space Grotesk', sans-serif",
+      color: "#FFFFFF"
+    }}
+  >
+    A voice for<br />Guyuk/Shelleng.
+  </h1>
+</Reveal>
+
             <Reveal delay={160}>
               <p className="text-white/65 max-w-md mt-6 sm:mt-7 text-[14.5px] sm:text-[16px] leading-7 sm:leading-8">
                 Chief Eli Jegu&#8209;Bara Gamaliel (ICMC, CMC, JP) — legal practitioner, businessman and corporate&#8209;governance advocate, born and bred in Adamawa State — seeking to represent Guyuk/Shelleng Federal Constituency in the Federal House of Representatives.
@@ -448,8 +507,14 @@ function Home({ go }) {
               className="absolute inset-0"
               style={{ background: "radial-gradient(circle at 65% 35%, rgba(201,168,118,0.14), transparent 55%), linear-gradient(160deg,#1a2420,#101614 65%)" }}
             />
-            <SealOutline className="absolute w-[120%] max-w-none text-white/[0.06] pointer-events-none" />
-            <div className="relative z-10 w-28 h-28 sm:w-36 sm:h-36"><Seal className="w-full h-full drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]" /></div>
+            {/* IMAGE: hero */}
+            <Photo name="hero" alt="Chief Eli Jegu-Bara Gamaliel" />
+            {!IMAGES.hero && (
+              <>
+                <SealOutline className="absolute w-[120%] max-w-none text-white/[0.06] pointer-events-none" />
+                <div className="relative z-10 w-28 h-28 sm:w-36 sm:h-36"><Seal className="w-full h-full drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]" /></div>
+              </>
+            )}
 
             <Reveal delay={200} className="absolute bottom-6 left-6 right-6 sm:left-10 sm:right-auto sm:bottom-10 bg-white rounded-2xl px-6 py-5 sm:w-[300px] shadow-2xl shadow-black/40">
               <div className="text-[11px] tracking-[0.15em] text-[#E23A55] font-semibold mb-1.5">FOUNDER</div>
@@ -487,7 +552,10 @@ function Home({ go }) {
             </div>
             <button onClick={() => go("speeches")} className="relative flex items-center justify-center group overflow-hidden min-h-[280px] lg:min-h-[320px] focus:outline-none">
               <div className="absolute inset-0 bg-gradient-to-br from-[#1e4b3f] via-[#173c33] to-[#101c18] transition-transform duration-700 ease-out group-hover:scale-105" />
-              <SealOutline className="absolute w-[70%] text-white/10 pointer-events-none" />
+              {/* IMAGE: featured */}
+              <Photo name="featured" alt="Kiri Dam irrigation" className="transition-transform duration-700 ease-out group-hover:scale-105" />
+              <Shade name="featured" />
+              {!IMAGES.featured && <SealOutline className="absolute w-[70%] text-white/10 pointer-events-none" />}
               <span className="absolute top-8 left-8 text-white/90 text-[12px] tracking-[0.3em]">AGRICULTURE IS OUR BACKBONE</span>
               <span className="absolute bottom-10 left-8 right-8 text-white text-2xl md:text-3xl lg:text-[2.1rem] leading-tight text-left" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                 Kiri Dam Irrigation &amp;<br />Agro&#8209;Processing
@@ -517,8 +585,12 @@ function Home({ go }) {
                 onClick={() => go("speeches")}
                 className="w-full text-left border border-[#E7E5E0] rounded-2xl overflow-hidden hover:border-[#15171A] hover:-translate-y-1 hover:shadow-[0_20px_40px_-24px_rgba(0,0,0,0.25)] transition-all duration-300 group"
               >
-                <div className="h-[160px] sm:h-[180px] lg:h-[200px] overflow-hidden bg-gradient-to-br from-[#eef2ee] to-[#dfe6e0] flex items-center justify-center">
-                  <div className="w-16 h-16 opacity-80 transition-transform duration-500 group-hover:scale-110"><Seal className="w-full h-full" /></div>
+                <div className="relative h-[160px] sm:h-[180px] lg:h-[200px] overflow-hidden bg-gradient-to-br from-[#eef2ee] to-[#dfe6e0] flex items-center justify-center">
+                  {/* IMAGE: homeCards[i] */}
+                  <Photo name="homeCards" index={i} alt={p.title} className="transition-transform duration-500 group-hover:scale-105" />
+                  {!getImage("homeCards", i) && (
+                    <div className="w-16 h-16 opacity-80 transition-transform duration-500 group-hover:scale-110"><Seal className="w-full h-full" /></div>
+                  )}
                 </div>
                 <div className="p-5 sm:p-6 lg:p-7">
                   <Pill>{p.tag}</Pill>
@@ -541,10 +613,16 @@ function Home({ go }) {
         <div className="grid lg:grid-cols-2 gap-5 sm:gap-6 lg:gap-8">
           <Reveal className="grid sm:grid-rows-2 gap-5 sm:gap-6">
             <div className="relative rounded-2xl overflow-hidden bg-[#1e2a26] min-h-[150px] sm:h-[190px] lg:h-[210px] flex items-end p-6">
-              <p className="text-white text-[14px] font-medium leading-snug max-w-xs">Two decades in law, governance and public service</p>
+              {/* IMAGE: focusTop */}
+              <Photo name="focusTop" alt="Law, governance and public service" />
+              <Shade name="focusTop" />
+              <p className="relative text-white text-[14px] font-medium leading-snug max-w-xs">Two decades in law, governance and public service</p>
             </div>
             <div className="relative rounded-2xl overflow-hidden bg-[#2b2b2b] min-h-[150px] sm:h-[190px] lg:h-[210px] flex items-end p-6">
-              <p className="text-white text-[14px] font-medium leading-snug max-w-xs">A manifesto built on health, security, agriculture and youth</p>
+              {/* IMAGE: focusBottom */}
+              <Photo name="focusBottom" alt="Health, security, agriculture and youth" />
+              <Shade name="focusBottom" />
+              <p className="relative text-white text-[14px] font-medium leading-snug max-w-xs">A manifesto built on health, security, agriculture and youth</p>
             </div>
           </Reveal>
           <Reveal delay={100} className="relative rounded-2xl overflow-hidden bg-[#15171A] text-white p-7 sm:p-10 lg:p-12 flex flex-col justify-center min-h-[300px] lg:min-h-[420px]">
@@ -564,7 +642,7 @@ function Home({ go }) {
       {/* CTA BAND */}
       <section className="bg-[#E23A55] py-16 sm:py-20 text-center px-6">
         <Reveal>
-          <h2 className="text-white text-[clamp(1.8rem,4vw,3rem)] leading-tight mb-5" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+          <h2 className="text-white text-[length:clamp(1.8rem,4vw,3rem)] leading-tight mb-5" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             Read the full manifesto for Guyuk/Shelleng
           </h2>
           <p className="text-white/80 text-[15px] mb-9 max-w-xl mx-auto">Six policy pillars — health, security, agriculture, youth, infrastructure and funding — grounded in evidence for the constituency.</p>
@@ -640,9 +718,18 @@ function About({ go }) {
             <ChevronLeft size={14} className="transition-transform duration-200 group-hover:-translate-x-0.5" /> Back home
           </button>
           <p className="text-white/55 text-[11px] tracking-[0.25em] mb-4">LEGAL PRACTITIONER &middot; CORPORATE GOVERNANCE ADVOCATE</p>
-          <h1 className="text-[clamp(2.2rem,5vw,4rem)] max-w-2xl leading-[1.05]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            About Chief Gamaliel
-          </h1>
+   
+<h1
+  className="text-[length:clamp(2.2rem,5vw,4rem)] max-w-2xl leading-[1.05]"
+  style={{
+    fontFamily: "'Space Grotesk', sans-serif",
+    color: "#FFFFFF"
+  }}
+>
+  About Chief Gamaliel
+</h1>
+
+          
         </div>
       </section>
 
@@ -683,8 +770,10 @@ function About({ go }) {
                 </div>
               </div>
               <div className="border border-[#E7E5E0] rounded-2xl p-2 h-fit">
-                <div className="h-[210px] sm:h-[240px] rounded-xl overflow-hidden bg-gradient-to-br from-[#dfe3e6] to-[#c7cdd2] flex items-center justify-center">
-                  <div className="w-14 h-14 opacity-70"><Seal className="w-full h-full" /></div>
+                <div className="relative h-[210px] sm:h-[240px] rounded-xl overflow-hidden bg-gradient-to-br from-[#dfe3e6] to-[#c7cdd2] flex items-center justify-center">
+                  {/* IMAGE: aboutPortrait */}
+                  <Photo name="aboutPortrait" alt="Chief Eli Jegu-Bara Gamaliel" />
+                  {!IMAGES.aboutPortrait && <div className="w-14 h-14 opacity-70"><Seal className="w-full h-full" /></div>}
                 </div>
                 <p className="text-[11.5px] text-black/40 px-2 py-3 leading-snug">Chief Eli Jegu&#8209;Bara Gamaliel, candidate for Guyuk/Shelleng Federal Constituency</p>
               </div>
@@ -749,14 +838,19 @@ function About({ go }) {
       </section>
 
       <section className="relative min-h-[220px] sm:h-[300px] lg:h-[340px] flex items-center justify-center bg-[#1c1c1c] overflow-hidden px-5">
-        <div className="absolute inset-0 opacity-40" style={{ backgroundImage: "repeating-linear-gradient(120deg,#2a2a2a 0 3px,#1c1c1c 3px 6px)" }} />
+        {/* IMAGE: aboutBanner */}
+        <Photo name="aboutBanner" alt="" />
+        <Shade name="aboutBanner" className="bg-black/50" />
+        {!IMAGES.aboutBanner && (
+          <div className="absolute inset-0 opacity-40" style={{ backgroundImage: "repeating-linear-gradient(120deg,#2a2a2a 0 3px,#1c1c1c 3px 6px)" }} />
+        )}
         <Reveal>
-          <h2 className="relative text-white text-[clamp(1.9rem,5vw,3.4rem)] text-center" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>No one left behind.</h2>
+          <h2 className="relative text-white text-[length:clamp(1.9rem,5vw,3.4rem)] text-center" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>No one left behind.</h2>
         </Reveal>
       </section>
 
       <section className="bg-[#E23A55] py-16 sm:py-20 text-center px-6">
-        <h2 className="text-white text-[clamp(1.7rem,3.6vw,2.6rem)] mb-5" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Be part of the manifesto</h2>
+        <h2 className="text-white text-[length:clamp(1.7rem,3.6vw,2.6rem)] mb-5" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>Be part of the manifesto</h2>
         <p className="text-white/80 mb-9 max-w-md mx-auto text-[15px]">Read the full manifesto for Guyuk/Shelleng Federal Constituency.</p>
         <button onClick={() => go("speeches")} className="bg-[#15171A] text-white font-semibold text-sm px-8 py-4 rounded-full inline-flex items-center gap-2 hover:bg-black transition group">
           Read the Manifesto <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
@@ -790,10 +884,15 @@ function Speeches({ go }) {
   return (
     <>
       <section className="relative min-h-[220px] sm:h-[300px] lg:h-[340px] bg-[#15171A] overflow-hidden flex items-end">
-        <div className="absolute inset-0 opacity-50" style={{ backgroundImage: "radial-gradient(circle at 70% 30%, rgba(226,58,85,0.25), transparent 55%), repeating-linear-gradient(100deg,#26282c 0 2px,#17181b 2px 5px)" }} />
+        {/* IMAGE: manifestoHero */}
+        <Photo name="manifestoHero" alt="" />
+        <Shade name="manifestoHero" className="bg-black/50" />
+        {!IMAGES.manifestoHero && (
+          <div className="absolute inset-0 opacity-50" style={{ backgroundImage: "radial-gradient(circle at 70% 30%, rgba(226,58,85,0.25), transparent 55%), repeating-linear-gradient(100deg,#26282c 0 2px,#17181b 2px 5px)" }} />
+        )}
         <div className={`relative ${CONTAINER} pb-10 sm:pb-12`}>
           <p className="text-white/55 text-[11px] tracking-[0.25em] mb-4">A PLAN FOR GUYUK/SHELLENG</p>
-          <span className="inline-block text-white text-[clamp(1.8rem,4vw,2.9rem)]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>The Manifesto</span>
+          <span className="inline-block text-white text-[length:clamp(1.8rem,4vw,2.9rem)]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>The Manifesto</span>
         </div>
       </section>
 
@@ -813,7 +912,9 @@ function Speeches({ go }) {
                   className="relative h-[150px] sm:h-[190px] lg:h-[210px] overflow-hidden flex items-center justify-center"
                   style={{ background: `linear-gradient(150deg, hsl(${(i * 37) % 360} 12% 20%), hsl(${(i * 37) % 360} 8% 32%))` }}
                 >
-                  <SealOutline className="absolute w-[70%] text-white/10 pointer-events-none" />
+                  {/* IMAGE: pillars[i] */}
+                  <Photo name="pillars" index={i} alt={p.name} className="transition-transform duration-500 group-hover:scale-105" />
+                  {!getImage("pillars", i) && <SealOutline className="absolute w-[70%] text-white/10 pointer-events-none" />}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20">
                     <span className="w-11 h-11 rounded-full bg-[#E23A55] flex items-center justify-center">
                       <ArrowUpRight size={18} className="text-white" />
@@ -894,7 +995,7 @@ function Contact({ go }) {
 
       <div className={`${CONTAINER} py-10 sm:py-16 lg:py-20 grid md:grid-cols-2 gap-10 lg:gap-20 flex-1 items-start`}>
         <div className="max-w-xl">
-          <h1 className="text-[clamp(1.9rem,4.5vw,3.2rem)] leading-[1.05] tracking-[-0.02em]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+          <h1 className="text-[length:clamp(1.9rem,4.5vw,3.2rem)] leading-[1.05] tracking-[-0.02em]" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             Hello, there! We'll be glad to hear from you.
           </h1>
           <p className="text-black/50 text-[14.5px] mt-5 max-w-md leading-relaxed">
@@ -964,8 +1065,14 @@ function Contact({ go }) {
 
         <div className="flex flex-col items-center w-full">
           <div className="relative w-full max-w-sm lg:max-w-md aspect-[4/3] sm:aspect-[3/4] rounded-2xl overflow-hidden bg-gradient-to-b from-[#eef0f1] to-[#d7dbde] flex items-center justify-center">
-            <SealOutline className="absolute w-[80%] text-black/[0.06] pointer-events-none" />
-            <div className="relative w-24 h-24"><Seal className="w-full h-full" /></div>
+            {/* IMAGE: contactPortrait */}
+            <Photo name="contactPortrait" alt="Chief Eli Jegu-Bara Gamaliel" />
+            {!IMAGES.contactPortrait && (
+              <>
+                <SealOutline className="absolute w-[80%] text-black/[0.06] pointer-events-none" />
+                <div className="relative w-24 h-24"><Seal className="w-full h-full" /></div>
+              </>
+            )}
           </div>
           <div className="flex items-center flex-wrap justify-center gap-4 mt-8">
             {[Twitter, Facebook, Instagram, Youtube, Linkedin].map((Icon, i) => (
