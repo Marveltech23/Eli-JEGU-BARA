@@ -48,7 +48,7 @@ const READ = "max-w-[62ch]";
 const IMAGES = {
   logo: "/images/logo.png",                          // Logo mark: nav, footer, contact header (square / round works best)
   hero: "/images/govormor.jpeg",     // HOME: hero right panel (portrait)
-  featured: "",                      // HOME: Featured priority "Kiri Dam Irrigation" (landscape)
+  featured: "/images/agro.jpg",                      // HOME: Featured priority "Kiri Dam Irrigation" (landscape)
   homeCards: ["/images/Health.jpeg", "/images/security.jpeg", "/images/agriculture.jpeg"],           // HOME: 3 manifesto cards, in order: Health, Security, Agriculture
   focusTop: "",                      // HOME: card "Two decades in law, governance…"
   focusBottom: "",                   // HOME: card "A manifesto built on health…"
