@@ -53,8 +53,8 @@ const IMAGES = {
   focusTop: "",                      // HOME: card "Two decades in law, governance…"
   focusBottom: "",                   // HOME: card "A manifesto built on health…"
   aboutPortrait: "/images/aboutpicture.jpeg",                 // ABOUT: biography portrait
-  aboutBanner: "",                   // ABOUT: "No one left behind." banner (wide)
-  manifestoHero: "",                 // MANIFESTO: header banner (wide)
+  aboutBanner: "/images/About Chief Gamaliel.png",                   // ABOUT: "No one left behind." banner (wide)
+  manifestoHero: "/images/About Chief Gamaliel.png",                 // MANIFESTO: header banner (wide)
   pillars: ["/images/healthmanifest.jpg", "/images/security.jpeg", "images/foodsecuirty.jpg", "/images/sport.jpg", "/images/infrastructure.jpg", "/images/policymachnaism.jpeg"], // MANIFESTO: 6 cards, in order: Health, Security, Agriculture, Sports/Youth/Education, Infrastructure, Policy & Funding
   contactPortrait: "/images/contact.jpeg",               // CONTACT: side portrait
 };
