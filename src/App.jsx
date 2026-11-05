@@ -5,11 +5,7 @@ import {
 } from "lucide-react";
 
 /* lucide-react has no brand/logo icons (trademark reasons) — small inline SVGs instead. */
-const Twitter = (props) => (
-  <svg viewBox="0 0 24 24" width={props.size || 24} height={props.size || 24} fill="currentColor" {...props}>
-    <path d="M18.9 2H22l-7.5 8.6L23.3 22h-6.9l-5.4-7-6.2 7H1.6l8-9.2L.8 2h7.1l4.9 6.4L18.9 2zm-1.2 18h1.9L7.4 4H5.4l12.3 16z" />
-  </svg>
-);
+
 const Facebook = (props) => (
   <svg viewBox="0 0 24 24" width={props.size || 24} height={props.size || 24} fill="currentColor" {...props}>
     <path d="M13.5 21v-7.9h2.6l.4-3.1h-3v-2c0-.9.25-1.5 1.55-1.5H16.6V3.8C16.3 3.76 15.3 3.68 14.1 3.68c-2.4 0-4.1 1.47-4.1 4.16v2.32H7.4v3.1H10v7.9h3.5z" />
@@ -22,16 +18,17 @@ const Instagram = (props) => (
     <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
   </svg>
 );
-const Youtube = (props) => (
-  <svg viewBox="0 0 24 24" width={props.size || 24} height={props.size || 24} fill="currentColor" {...props}>
-    <path d="M22.5 7.2s-.22-1.55-.9-2.24c-.85-.9-1.8-.9-2.24-.95C16.2 3.75 12 3.75 12 3.75h-.01s-4.2 0-7.36.26c-.44.05-1.39.05-2.24.95-.68.69-.9 2.24-.9 2.24S1.2 9 1.2 10.8v1.4c0 1.8.29 3.6.29 3.6s.22 1.55.9 2.24c.85.9 1.96.87 2.46.97C6.6 19.15 12 19.2 12 19.2s4.2 0 7.36-.27c.44-.05 1.39-.05 2.24-.95.68-.69.9-2.24.9-2.24s.29-1.8.29-3.6v-1.4c0-1.8-.29-3.6-.29-3.6zM9.75 14.6V8.9l5.5 2.85-5.5 2.85z" />
-  </svg>
-);
 const Linkedin = (props) => (
   <svg viewBox="0 0 24 24" width={props.size || 24} height={props.size || 24} fill="currentColor" {...props}>
     <path d="M4.98 3.5a2.5 2.5 0 11-.02 5.001A2.5 2.5 0 014.98 3.5zM3 8.98h4v11.52H3zM9.5 8.98H13v1.57h.05c.5-.9 1.7-1.85 3.5-1.85 3.74 0 4.43 2.36 4.43 5.42v6.38h-4v-5.66c0-1.35-.02-3.08-1.87-3.08-1.88 0-2.17 1.46-2.17 2.98v5.76h-4V8.98z" />
   </svg>
 );
+
+const SOCIALS = [
+  { name: "Facebook",  Icon: Facebook,  href: "https://www.facebook.com/share/19mi3QMKZ6/?mibextid=wwXIfr" },
+  { name: "Instagram", Icon: Instagram, href: "https://www.instagram.com/elijegubaragamaliel?srtk=emZ2Z205eWVmbm5h" },
+  { name: "LinkedIn",  Icon: Linkedin,  href: "https://www.linkedin.com/in/eli-j-gamaliel" },
+];
 
 /* ---------------------------------------------------------------------
    DESIGN TOKENS  (unchanged from the original build)
@@ -398,11 +395,13 @@ function Footer({ go }) {
               The campaign of Chief Eli Jegu&#8209;Bara Gamaliel (ICMC, CMC, JP) for the Federal House of Representatives, representing Guyuk/Shelleng Federal Constituency, Adamawa State.
             </p>
             <div className="flex items-center gap-2.5">
-              {[Twitter, Facebook, Instagram, Youtube, Linkedin].map((Icon, i) => (
+              {SOCIALS.map(({ name, Icon, href }) => (
                 <a
-                  key={i}
-                  href="#"
-                  onClick={(e) => e.preventDefault()}
+                  key={name}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={name}
                   className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/70 hover:text-white hover:border-white/40 hover:bg-white/5 hover:scale-110 active:scale-95 transition-all duration-200"
                 >
                   <Icon size={14} />
@@ -1075,11 +1074,13 @@ function Contact({ go }) {
             )}
           </div>
           <div className="flex items-center flex-wrap justify-center gap-4 mt-8">
-            {[Twitter, Facebook, Instagram, Youtube, Linkedin].map((Icon, i) => (
+            {SOCIALS.map(({ name, Icon, href }) => (
               <a
-                key={i}
-                href="#"
-                onClick={(e) => e.preventDefault()}
+                key={name}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={name}
                 className="w-9 h-9 rounded-full border border-black/10 flex items-center justify-center text-black/70 hover:text-white hover:bg-[#15171A] hover:border-[#15171A] hover:scale-110 active:scale-95 transition-all duration-200"
               >
                 <Icon size={15} />
